@@ -1,20 +1,22 @@
+//RobotArmServoの可動範囲(5V 0.3AのDC電源での動作の場合)
+//bottomServo:0-150
+//frontbackServo:60-120
+//updownServo:40-70
+
 #include <VarSpeedServo.h>
 
-Servo bottomServo;
-Servo frontbackServo;
-Servo updownServo;
-
-char inputkey;
-
-int bottomPos;
-int frontbackPos;
-int updownPos;
+VarSpeedServo bottomServo;
+VarSpeedServo frontbackServo;
+VarSpeedServo updownServo;
 
 void setup(){
-//  Serial.begin(9600);
   bottomServo.attach(3);
   frontbackServo.attach(5);
   updownServo.attach(6);
+
+  //frontbackServoは角度固定のためsetup内で角度指定
+  frontbackServo.write(60);
+  frontbackServo.wait();
 }
 
 void loop() {
@@ -24,38 +26,18 @@ void loop() {
   delay(2000);
 }
 
+//WaitPositionに戻る関数
 void moveWaitPos(){
-//   for(bottomPos=50; bottomPos>=0; bottomPos-=1){
-//    for(frontbackPos=50; frontbackPos>=0; frontbackPos-=1){
-//      frontbackServo.write(frontbackPos);
-//      delay(30);
-//    }
-//      bottomServo.write(bottomPos);
-//      delay(30);
-//   }
-//  bottomServo.write(0);
-  frontbackServo.write(0);
+  updownServo.write(60,20,true);
+  bottomServo.write(0,20,true);
+  bottomServo.wait();
+  updownServo.wait();
 }
 
+//砂糖FillPositionに戻る関数
 void moveFillPos(){
-//    for(bottomPos=0; bottomPos<=50; bottomPos+=1){
-//      bottomServo.write(bottomPos);
-//      delay(30);
-//    }
-//  bottomServo.write(50);
-  frontbackServo.write(50);
-}
-
-void servoKey(){
-    inputkey =Serial.read();
-  if( inputkey !=-1){
-    bottomPos = inputkey;
-    bottomServoMove();
-    Serial.print(inputkey);
-  }
-}
-
-void bottomServoMove(){
-  bottomServo.write(bottomPos);
-  delay(1000);
+  bottomServo.write(90,20,true);
+  updownServo.write(70,20,true);
+  bottomServo.wait();
+  updownServo.wait();
 }
