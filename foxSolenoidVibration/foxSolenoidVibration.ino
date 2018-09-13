@@ -1,5 +1,5 @@
 #define vib 9
-#define sol1 10
+#define sol1 8
 
 int rotatingSpeed = 255;
 
