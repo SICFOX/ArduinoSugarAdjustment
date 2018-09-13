@@ -5,17 +5,19 @@
 
 #include <VarSpeedServo.h>
 
-#define vib 8
-#define sol1 9
-#define sol2 10
-
 VarSpeedServo bottomServo;
 VarSpeedServo frontbackServo;
 VarSpeedServo updownServo;
+#define vib 8
+#define sol1 9
+#define sol2 10
+#define sol3 11
+#define sol4 12
 
-int solKnockCount = 25;
+int solKnockCount = 25;   //solKnock()でSolenoidが叩く回数
 
 void setup(){
+  //RobotArmのServoのピン番号指定
   bottomServo.attach(3);
   frontbackServo.attach(5);
   updownServo.attach(6);
@@ -27,15 +29,20 @@ void setup(){
   //SolenoidとVibrationのピン設定
   pinMode(vib,OUTPUT);
   pinMode(sol1,OUTPUT);
+  pinMode(sol2,OUTPUT);
+  pinMode(sol3,OUTPUT);
+  pinMode(sol4,OUTPUT);
 }
 
 void loop() {
-  moveFillPos();
-  delay(1000);
-  solKnock();
-  delay(3000);
-  moveWaitPos();
-  delay(3000);
+  for(int i=9; i<=12; i++){
+    moveFillPos();
+    delay(1000);
+    solKnock(i);
+    delay(3000);
+    moveWaitPos();
+    delay(3000);
+  }
 }
 
 //WaitPositionに戻る関数
@@ -55,13 +62,14 @@ void moveFillPos(){
 }
 
 //SolenoidとVibrationで砂糖を送り出す関数
-void solKnock(){
-  digitalWrite(vib,HIGH);
+void solKnock(int x){
+  digitalWrite(vib,HIGH);   //Vibration回転開始
+  delay(500);   //Vibrationに電流を流してから振動し始めるまでの待ち時間
   for(int i=0; i<solKnockCount; i++){
-  digitalWrite(sol1,HIGH);
+  digitalWrite(x,HIGH);
   delay(70);
-  digitalWrite(sol1,LOW);
+  digitalWrite(x,LOW);
   delay(30);
   }
-  digitalWrite(vib,LOW);
+  digitalWrite(vib,LOW);    //Vibration回転終了
 }

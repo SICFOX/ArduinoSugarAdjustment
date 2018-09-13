@@ -1,22 +1,26 @@
 #define vib 8 
 #define sol1 9
+#define sol2 10
 
 void setup() {
   pinMode(vib,OUTPUT);
   pinMode(sol1,OUTPUT);
+  pinMode(sol2,OUTPUT);
 }
 
 void loop() {
-  solKnock();
-  delay(5000);
+  for(int i=9; i<=10; i++){
+    solKnock(i);
+    delay(1000);
+  }
 }
 
-void solKnock(){
+void solKnock(int x){
   digitalWrite(vib,HIGH);
   for(int i=0; i<20; i++){
-  digitalWrite(sol1,HIGH);
+  digitalWrite(x,HIGH);
   delay(70);
-  digitalWrite(sol1,LOW);
+  digitalWrite(x,LOW);
   delay(30);
   }
   digitalWrite(vib,LOW);
