@@ -1,4 +1,4 @@
-#define vib 9
+#define vib 8
 
 void setup() {
   pinMode(vib,OUTPUT);

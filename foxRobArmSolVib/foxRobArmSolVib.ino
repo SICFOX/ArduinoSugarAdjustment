@@ -55,7 +55,7 @@ void moveWaitPos(){
 
 //砂糖FillPositionに戻る関数
 void moveFillPos(){
-  bottomServo.write(90,20,true);
+  bottomServo.write(94,20,true);
   updownServo.write(70,20,true);
   bottomServo.wait();
   updownServo.wait();
@@ -63,7 +63,7 @@ void moveFillPos(){
 
 //SolenoidとVibrationで砂糖を送り出す関数
 void solKnock(int x){
-  digitalWrite(vib,HIGH);   //Vibration回転開始
+  //digitalWrite(vib,HIGH);   //Vibration回転開始
   delay(500);   //Vibrationに電流を流してから振動し始めるまでの待ち時間
   for(int i=0; i<solKnockCount; i++){
   digitalWrite(x,HIGH);
