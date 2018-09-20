@@ -15,8 +15,11 @@ VarSpeedServo updownServo;
 #define sol3 11
 #define sol4 12
 
-char inputKey;
-int solKnockCount = 25;   //solKnock()でSolenoidが叩く回数
+char inputKey;  //キーボード入力用の変数
+char buf[20];   //Serial通信用バッファの変数
+int candyColor;   //砂糖の色(0~3の4通り、0:white,1:red,2:green,3.blue)
+int solKnockCount;   //solKnock()でSolenoidが叩く回数
+int j = 0;    //Serial通信用バッファの変数
 
 void setup() {
   //RobotArmのServoのピン番号指定
@@ -37,19 +40,58 @@ void setup() {
 
   Serial.begin(9600);
   moveWaitPos();
-  delay(1000);
 }
 
 void loop() {
-  readSerial();
-  //  for(int i=9; i<=12; i++){
-  //    moveFillPos();
-  //    delay(1000);
-  //    solKnock(i);
-  //    delay(3000);
-  //    moveWaitPos();
-  //    delay(3000);
-  //  }
+  if (Serial.available()) {
+    buf[j] = Serial.read();
+    if (buf[j] == 'e') {
+      buf[j] = '\0';
+
+      candyColor = atoi(strtok(buf, ","));
+      solKnockCount = atoi(strtok(NULL, ","));
+
+      Serial.println(solKnockCount);
+      Serial.println(candyColor);
+
+      switch (candyColor) {
+        case 0 :
+          moveFillPos();
+          delay(1000);
+          solKnock(9);
+          delay(3000);
+          moveWaitPos();
+          break;
+        case 1 :
+          moveFillPos();
+          delay(1000);
+          solKnock(10);
+          delay(3000);
+          moveWaitPos();
+          break;
+        case 2 :
+          moveFillPos();
+          delay(1000);
+          solKnock(11);
+          delay(3000);
+          moveWaitPos();
+          break;
+        case 3 :
+          moveFillPos();
+          delay(1000);
+          solKnock(12);
+          delay(3000);
+          moveWaitPos();
+          break;
+        default:
+          break;
+      }
+      j = 0;
+    }
+    else {
+      j++;
+    }
+  }
 }
 
 //WaitPositionに戻る関数
@@ -79,46 +121,4 @@ void solKnock(int x) {
     delay(30);
   }
   digitalWrite(vib, LOW);   //Vibration回転終了
-}
-
-void readSerial() {
-  inputKey = Serial.read();
-  if (inputKey != -1) {
-    switch (inputKey) {
-      case '1' :
-        moveFillPos();
-        delay(1000);
-        solKnock(9);
-        delay(3000);
-        moveWaitPos();
-        delay(3000);
-        break;
-      case '2' :
-        moveFillPos();
-        delay(1000);
-        solKnock(10);
-        delay(3000);
-        moveWaitPos();
-        delay(3000);
-        break;
-      case '3' :
-        moveFillPos();
-        delay(1000);
-        solKnock(11);
-        delay(3000);
-        moveWaitPos();
-        delay(3000);
-        break;
-      case '4' :
-        moveFillPos();
-        delay(1000);
-        solKnock(12);
-        delay(3000);
-        moveWaitPos();
-        delay(3000);
-        break;
-      default:
-        break;
-    }
-  }
 }
