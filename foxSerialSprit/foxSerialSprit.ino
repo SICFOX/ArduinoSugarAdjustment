@@ -1,9 +1,11 @@
 int i = 0;
 char buf[20];
 int ch[5];
+int a,b;
 
 void setup() {
   Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
@@ -13,15 +15,23 @@ void loop() {
       buf[i] = '\0';
       //Serial.println(buf);
 
-      ch[0] = atoi(strtok(buf, ","));
-      ch[1] = atoi(strtok(NULL, ","));
+      a = atoi(strtok(buf, ","));
+      b = atoi(strtok(NULL, ","));
 
-      Serial.println(ch[0]);
-      Serial.println(ch[1]);
+      Serial.println(a);
+      Serial.println(b);
+      blink(a,b);
       i = 0;
     }
     else {
       i++;
     }
   }
+}
+
+void blink(int x,int y){
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(x*1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(y*1000);
 }
